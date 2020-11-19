@@ -34,6 +34,9 @@ const galleryItemArr = images.map(image => createGalleryItem(image));
 
 refs.gallery.append(...galleryItemArr);
 
+const galleryImagesRefs = document.querySelectorAll('.gallery__image');
+const galleryImagesArr = Array.from(galleryImagesRefs);
+
 refs.gallery.addEventListener('click', handleOnGalleryClick);
 refs.lightboxCloseBtn.addEventListener('click', handleOnLightboxCloseBtnClick);
 refs.lightboxOverlay.addEventListener('click', handleOnLightboxOverlayClick);
@@ -58,16 +61,8 @@ function handleOnLightboxOverlayClick(event) {
   }
 }
 
-function hadleEscapePress(event) {
-  if (event.code === 'Escape') {
-    closeLightbox();
-  }
-}
-
-function handleArrowsPress(event) {
-  const activeImage = findActiveImage();
-
-  let currentIndex = Number(activeImage.dataset.index);
+function handleKeybordKeyPress(event) {
+  let currentIndex = findActiveImageIndex();
 
   switch (event.code) {
     case 'ArrowRight':
@@ -78,24 +73,18 @@ function handleArrowsPress(event) {
       currentIndex -= 1;
       break;
 
+    case 'Escape':
+      closeLightbox();
+      break;
+
     default:
   }
 
-  console.log(currentIndex);
-  if (currentIndex >= 0 && currentIndex <= 8) {
-    const nextImage = document.querySelector(`[data-index="${currentIndex}"]`);
-
-    refs.lightboxImage.src = nextImage.dataset.sourse;
-    refs.lightboxImage.alt = nextImage.alt;
-    refs.lightboxImage.dataset.index = nextImage.dataset.index;
-  }
+  changeActiveImage(currentIndex);
 }
 
 function openLightbox(image) {
-  window.addEventListener('keydown', hadleEscapePress);
-  // window.addEventListener('keydown', handleLeftArrowPress);
-  // window.addEventListener('keydown', handleRightArrowPress);
-  window.addEventListener('keydown', handleArrowsPress);
+  window.addEventListener('keydown', handleKeybordKeyPress);
 
   refs.lightbox.classList.add('is-open');
   refs.lightboxImage.src = image.dataset.sourse;
@@ -103,31 +92,29 @@ function openLightbox(image) {
 }
 
 function closeLightbox() {
-  window.removeEventListener('keydown', hadleEscapePress);
-  // window.removeEventListener('keydown', handleLeftArrowPress);
-  // window.removeEventListener('keydown', handleRightArrowPress);
-  window.removeEventListener('keydown', handleArrowsPress);
+  window.removeEventListener('keydown', handleKeybordKeyPress);
 
   refs.lightbox.classList.remove('is-open');
   refs.lightboxImage.src = '';
   refs.lightboxImage.alt = '';
 }
 
-function findActiveImage() {
+function findActiveImageIndex() {
   const activeImageSourse = refs.lightboxImage.src;
-  // console.log(activeImageSourse);
-
-  const imagesRefs = document.querySelectorAll('.gallery__image');
-  // console.log(imagesRefs);
-
-  const imagesArr = Array.from(imagesRefs);
-  // console.log(imagesArr);
-
-  const imageToFind = imagesArr.find(
+  const imageToFind = galleryImagesArr.find(
     image => image.dataset.sourse === activeImageSourse,
   );
+  const indexToFind = imageToFind.dataset.index;
 
-  // console.log(imageToFind);
+  return Number(indexToFind);
+}
 
-  return imageToFind;
+function changeActiveImage(index) {
+  if (index >= 0 && index <= galleryImagesArr.length - 1) {
+    const nextImage = document.querySelector(`[data-index="${index}"]`);
+
+    refs.lightboxImage.src = nextImage.dataset.sourse;
+    refs.lightboxImage.alt = nextImage.alt;
+    refs.lightboxImage.dataset.index = nextImage.dataset.index;
+  }
 }
