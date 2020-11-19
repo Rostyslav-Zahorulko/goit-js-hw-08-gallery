@@ -1,2 +1,3 @@
 # goit-js-hw-08-gallery
-ДЗ по JavaScript № 7
+
+ДЗ по JavaScript № 8
