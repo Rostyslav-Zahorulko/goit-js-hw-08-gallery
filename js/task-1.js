@@ -115,6 +115,5 @@ function changeActiveImage(index) {
 
     refs.lightboxImage.src = nextImage.dataset.sourse;
     refs.lightboxImage.alt = nextImage.alt;
-    refs.lightboxImage.dataset.index = nextImage.dataset.index;
   }
 }
