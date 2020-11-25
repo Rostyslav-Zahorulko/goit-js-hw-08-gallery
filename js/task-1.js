@@ -62,15 +62,17 @@ function handleOnLightboxOverlayClick(event) {
 }
 
 function handleKeybordKeyPress(event) {
-  let currentIndex = findActiveImageIndex();
+  let activeImageIndex = findActiveImageIndex();
 
   switch (event.code) {
     case 'ArrowRight':
-      currentIndex += 1;
+      activeImageIndex += 1;
+      changeActiveImage(activeImageIndex);
       break;
 
     case 'ArrowLeft':
-      currentIndex -= 1;
+      activeImageIndex -= 1;
+      changeActiveImage(activeImageIndex);
       break;
 
     case 'Escape':
@@ -79,8 +81,6 @@ function handleKeybordKeyPress(event) {
 
     default:
   }
-
-  changeActiveImage(currentIndex);
 }
 
 function openLightbox(image) {
@@ -111,9 +111,7 @@ function findActiveImageIndex() {
 
 function changeActiveImage(index) {
   if (index >= 0 && index <= galleryImagesArr.length - 1) {
-    const nextImage = document.querySelector(`[data-index="${index}"]`);
-
-    refs.lightboxImage.src = nextImage.dataset.sourse;
-    refs.lightboxImage.alt = nextImage.alt;
+    refs.lightboxImage.src = galleryImagesArr[index].dataset.sourse;
+    refs.lightboxImage.alt = galleryImagesArr[index].alt;
   }
 }
