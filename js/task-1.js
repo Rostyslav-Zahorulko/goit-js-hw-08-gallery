@@ -8,7 +8,7 @@ const refs = {
   lightboxCloseBtn: document.querySelector('[data-action="close-lightbox"]'),
 };
 
-function createGalleryItem(item) {
+function createGalleryItem(item, index) {
   const galleryItemRef = document.createElement('li');
   const galleryItemLinkRef = document.createElement('a');
   const galleryItemLinkImageRef = document.createElement('img');
@@ -22,7 +22,7 @@ function createGalleryItem(item) {
   galleryItemLinkImageRef.src = item.preview;
   galleryItemLinkImageRef.alt = item.description;
   galleryItemLinkImageRef.dataset.sourse = item.original;
-  galleryItemLinkImageRef.dataset.index = images.indexOf(item);
+  galleryItemLinkImageRef.dataset.index = index;
 
   galleryItemLinkRef.appendChild(galleryItemLinkImageRef);
   galleryItemRef.appendChild(galleryItemLinkRef);
@@ -30,9 +30,11 @@ function createGalleryItem(item) {
   return galleryItemRef;
 }
 
-const galleryItemArr = images.map(image => createGalleryItem(image));
+const galleryItemsArr = images.map((image, index) =>
+  createGalleryItem(image, index),
+);
 
-refs.gallery.append(...galleryItemArr);
+refs.gallery.append(...galleryItemsArr);
 
 const galleryImagesRefs = document.querySelectorAll('.gallery__image');
 const galleryImagesArr = Array.from(galleryImagesRefs);
